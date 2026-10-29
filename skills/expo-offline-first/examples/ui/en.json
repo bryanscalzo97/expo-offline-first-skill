@@ -1,0 +1,31 @@
+{
+  "offline": {
+    "indicator": "You're offline",
+    "backOnline": "Back online",
+    "title": "No connection",
+    "purchaseMessage": "Purchases need an internet connection. Try again when you're back online.",
+    "signInMessage": "Signing in needs an internet connection. Try again when you're back online."
+  },
+  "outbox": {
+    "queuedToast": "Saved. It will be sent when you're back online.",
+    "waiting": "Waiting for connection",
+    "sending": "Sending…",
+    "retry": "Retry",
+    "remove": "Remove",
+    "view": "View",
+    "readyTitle": "Ready",
+    "readyGroup_one": "{{count}} item ready",
+    "readyGroup_other": "{{count}} items ready",
+    "readyGroupSubtitle": "Finished while you were away",
+    "errors": {
+      "network": "Couldn't reach the server. It will retry when you're back online.",
+      "unavailable": "The service is temporarily unavailable. Try again later.",
+      "server": "Something went wrong on our side. Try again.",
+      "rate_limited": "You've hit the limit for now. Try again later.",
+      "auth": "Your session expired. Sign in and retry.",
+      "rejected": "This couldn't be sent. Edit it or remove it.",
+      "interrupted": "The app closed while sending. Retrying may send it again.",
+      "file_missing": "The attached file is no longer available."
+    }
+  }
+}

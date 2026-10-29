@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Offline First"
+  short_description: "Make Expo / React Native apps work offline: network awareness, persisted cache, durable outbox with idempotent retries, and offline UX"
+  default_prompt: "Use $expo-offline-first to make this Expo app work offline: wire connectivity into TanStack Query, persist the right queries, queue writes in a durable SQLite outbox with Idempotency-Key retries, and add a non-blocking offline indicator."
