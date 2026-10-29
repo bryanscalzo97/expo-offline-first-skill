@@ -17,7 +17,10 @@ export function readyNotice(items: readonly ReadyItem[]): ReadyNotice | null {
   return { kind: "group", count: items.length };
 }
 
+/** Window in which completions that land together merge into one toast. */
+export const READY_BATCH_MS = 600;
+
 /** Wait a beat to batch completions, and never show while the "Back online" pill is still up. */
-export function readyNoticeDelay(now: number, indicatorBusyUntil: number, batchMs = 600): number {
+export function readyNoticeDelay(now: number, indicatorBusyUntil: number, batchMs = READY_BATCH_MS): number {
   return Math.max(batchMs, indicatorBusyUntil - now);
 }

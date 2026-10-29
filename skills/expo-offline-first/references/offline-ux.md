@@ -1,7 +1,7 @@
 # Offline UX
 
 Code: [`examples/ui/`](../examples/ui/): `OfflineIndicator.tsx` + `indicator.ts`, `ReadyToast.tsx` +
-`ready-toast.tsx` + `ready-notice.ts`, `PendingCard.tsx`, `en.json` (all strings).
+`ready-toast.tsx` + `ready-notice.ts`, `PendingCard.tsx`, `theme.ts` (light/dark tokens), `en.json` (all strings).
 
 Principle: **offline is a state, not an error.** The user keeps reading and creating; the app
 tells them quietly what will happen.

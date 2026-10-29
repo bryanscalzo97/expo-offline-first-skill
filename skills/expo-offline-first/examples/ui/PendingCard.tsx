@@ -8,10 +8,15 @@ import { useTranslation } from "react-i18next";
 import { useOutbox } from "../outbox/OutboxProvider";
 import type { OutboxJob } from "../outbox/outbox-db";
 import { canCancel, canRetry, displayState, errorMessageKey } from "../outbox/state";
+import { tokens, useColorSchemeName, type ThemeTokens } from "./theme";
+
+/** Small text buttons need a bigger touch target than their glyphs. */
+const ACTION_HIT_SLOP = 8;
 
 export function PendingCard({ job }: { job: OutboxJob }) {
   const { t } = useTranslation();
   const { retry, cancel } = useOutbox();
+  const styles = themedStyles[useColorSchemeName()];
   const state = displayState(job);
   if (!state) return null;
 
@@ -29,12 +34,12 @@ export function PendingCard({ job }: { job: OutboxJob }) {
         {label}
       </Text>
       {canRetry(job) ? (
-        <Pressable onPress={() => void retry(job.id)} accessibilityRole="button" hitSlop={8}>
+        <Pressable onPress={() => void retry(job.id)} accessibilityRole="button" hitSlop={ACTION_HIT_SLOP}>
           <Text style={styles.action}>{t("outbox.retry")}</Text>
         </Pressable>
       ) : null}
       {canCancel(job) ? (
-        <Pressable onPress={() => void cancel(job.id)} accessibilityRole="button" hitSlop={8}>
+        <Pressable onPress={() => void cancel(job.id)} accessibilityRole="button" hitSlop={ACTION_HIT_SLOP}>
           <Text style={styles.action}>{t("outbox.remove")}</Text>
         </Pressable>
       ) : null}
@@ -42,8 +47,12 @@ export function PendingCard({ job }: { job: OutboxJob }) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: { flexDirection: "row", alignItems: "center", gap: 12, padding: 12, borderRadius: 14, backgroundColor: "rgba(120,120,128,0.12)" },
-  label: { flex: 1, fontSize: 14 },
-  action: { fontSize: 14, fontWeight: "600", color: "#0A84FF" },
-});
+function createStyles(theme: ThemeTokens) {
+  return StyleSheet.create({
+    card: { flexDirection: "row", alignItems: "center", gap: 12, padding: 12, borderRadius: 14, backgroundColor: theme.surfaceMuted },
+    label: { flex: 1, fontSize: 14, color: theme.text },
+    action: { fontSize: 14, fontWeight: "600", color: theme.accent },
+  });
+}
+
+const themedStyles = { light: createStyles(tokens.light), dark: createStyles(tokens.dark) };

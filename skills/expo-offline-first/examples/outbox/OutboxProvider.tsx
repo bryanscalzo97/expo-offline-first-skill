@@ -30,6 +30,8 @@ import {
 
 /** Set to false if your server does not deduplicate on Idempotency-Key yet. */
 const SERVER_IS_IDEMPOTENT = true;
+/** Wake slightly after the backoff expires so pickNext() sees the job as due. */
+const WAKE_SLACK_MS = 50;
 
 export type SendJob = (
   job: OutboxJob,
@@ -127,7 +129,7 @@ export function OutboxProvider({
     wakeTimerRef.current = null;
     const wakeAt = nextWakeAt(jobsRef.current);
     if (wakeAt === null) return;
-    wakeTimerRef.current = setTimeout(() => void flushRef.current(), Math.max(0, wakeAt - Date.now()) + 50);
+    wakeTimerRef.current = setTimeout(() => void flushRef.current(), Math.max(0, wakeAt - Date.now()) + WAKE_SLACK_MS);
   }, []);
 
   /** Single-flight: a flush requested while one is running sets a flag and re-runs once. */

@@ -37,6 +37,7 @@ export function setupNetworkManagers(): void {
     // Seed with the current state; the listener only fires on changes.
     void Network.getNetworkStateAsync()
       .then((state) => setOnline(isOnlineState(state)))
+      // Ignored: if the first read fails, the listener below still reports the next change.
       .catch(() => {});
     const subscription = Network.addNetworkStateListener((state) => setOnline(isOnlineState(state)));
     return () => subscription.remove();

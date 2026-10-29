@@ -1,6 +1,9 @@
 import { onlineManager } from "@tanstack/react-query";
 import { useEffect, useState, useSyncExternalStore } from "react";
 
+/** Long enough to ride out a Wi-Fi switch or an elevator, short enough to feel live. */
+export const OFFLINE_DEBOUNCE_MS = 1500;
+
 const subscribe = (callback: () => void) => onlineManager.subscribe(callback);
 const getSnapshot = () => onlineManager.isOnline();
 
@@ -14,7 +17,7 @@ export function useIsOnline(): boolean {
  * elevator) does not flash UI. Coming back online is reported immediately.
  * Use this for UI; use `onlineManager.isOnline()` for decisions like "send or enqueue".
  */
-export function useIsOfflineDebounced(delayMs = 1500): boolean {
+export function useIsOfflineDebounced(delayMs = OFFLINE_DEBOUNCE_MS): boolean {
   const online = useIsOnline();
   const [offline, setOffline] = useState(false);
   useEffect(() => {

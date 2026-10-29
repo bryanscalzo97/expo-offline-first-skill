@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { tokens, useColorSchemeName, type ThemeTokens } from "./theme";
 
 export interface ReadyToastProps {
   title: string;
@@ -17,22 +18,30 @@ export interface ReadyToastProps {
 }
 
 const THUMB = 44;
+const FALLBACK_ICON_SIZE = 22;
+const BLUR_INTENSITY = 40;
+const IMAGE_FADE_MS = 150;
+const PRESSED_OPACITY = 0.85;
 
 export function ReadyToast({ title, subtitle, thumbnailUri, actionLabel, onPress }: ReadyToastProps) {
+  const scheme = useColorSchemeName();
+  const theme = tokens[scheme];
+  const styles = themedStyles[scheme];
+
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={subtitle ? `${title}, ${subtitle}` : title}
       accessibilityHint={actionLabel}
-      style={({ pressed }) => [styles.toast, pressed && { opacity: 0.85 }]}
+      style={({ pressed }) => [styles.toast, pressed && styles.pressed]}
     >
-      <BlurView intensity={40} tint="systemChromeMaterialDark" style={StyleSheet.absoluteFill} />
+      <BlurView intensity={BLUR_INTENSITY} tint={theme.blurTint} style={StyleSheet.absoluteFill} />
       {thumbnailUri ? (
-        <Image source={{ uri: thumbnailUri }} style={styles.thumb} contentFit="cover" transition={150} />
+        <Image source={{ uri: thumbnailUri }} style={styles.thumb} contentFit="cover" transition={IMAGE_FADE_MS} />
       ) : (
         <View style={styles.fallback}>
-          <Ionicons name="checkmark" size={22} color="#10B981" />
+          <Ionicons name="checkmark" size={FALLBACK_ICON_SIZE} color={theme.success} />
         </View>
       )}
       <View style={styles.texts}>
@@ -52,35 +61,40 @@ export function ReadyToast({ title, subtitle, thumbnailUri, actionLabel, onPress
   );
 }
 
-const styles = StyleSheet.create({
-  toast: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    marginHorizontal: 16,
-    paddingVertical: 10,
-    paddingLeft: 10,
-    paddingRight: 12,
-    borderRadius: 22,
-    borderCurve: "continuous",
-    overflow: "hidden",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "rgba(255,255,255,0.14)",
-    backgroundColor: "rgba(24,24,27,0.82)",
-    boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
-  },
-  thumb: { width: THUMB, height: THUMB, borderRadius: 10, borderCurve: "continuous", backgroundColor: "#27272A" },
-  fallback: {
-    width: THUMB,
-    height: THUMB,
-    borderRadius: THUMB / 2,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(16,185,129,0.18)",
-  },
-  texts: { flex: 1, gap: 1 },
-  title: { color: "#FFFFFF", fontSize: 14, fontWeight: "600" },
-  subtitle: { color: "#A1A1AA", fontSize: 12 },
-  pill: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 999, backgroundColor: "#FFFFFF" },
-  pillText: { color: "#18181B", fontSize: 14, fontWeight: "600" },
-});
+function createStyles(theme: ThemeTokens) {
+  return StyleSheet.create({
+    toast: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      marginHorizontal: 16,
+      paddingVertical: 10,
+      paddingLeft: 10,
+      paddingRight: 12,
+      borderRadius: 22,
+      borderCurve: "continuous",
+      overflow: "hidden",
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: theme.border,
+      backgroundColor: theme.surfaceElevated,
+      boxShadow: `0 6px 16px ${theme.shadow}`,
+    },
+    pressed: { opacity: PRESSED_OPACITY },
+    thumb: { width: THUMB, height: THUMB, borderRadius: 10, borderCurve: "continuous", backgroundColor: theme.placeholder },
+    fallback: {
+      width: THUMB,
+      height: THUMB,
+      borderRadius: THUMB / 2,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: theme.successSoft,
+    },
+    texts: { flex: 1, gap: 1 },
+    title: { color: theme.text, fontSize: 14, fontWeight: "600" },
+    subtitle: { color: theme.textMuted, fontSize: 12 },
+    pill: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 999, backgroundColor: theme.inverseSurface },
+    pillText: { color: theme.inverseText, fontSize: 14, fontWeight: "600" },
+  });
+}
+
+const themedStyles = { light: createStyles(tokens.light), dark: createStyles(tokens.dark) };

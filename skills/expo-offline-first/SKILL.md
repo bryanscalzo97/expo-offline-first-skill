@@ -11,6 +11,21 @@ Make an Expo app **usable offline** without losing user input or charging twice.
 beyond the `expo-data-fetching` skill (fetch, React Query basics, `onlineManager` intro): use
 that for request plumbing, and this one when offline must be a first-class state.
 
+## Adapt to your project
+
+The examples show the behavior, not the house style. Do not paste them verbatim; adapt them to
+the host project's conventions first:
+
+- **Icons**: use the project's icon set/component (examples use Ionicons).
+- **Theme tokens**: map `examples/ui/theme.ts` to the project's colors/semantic tokens and theme hook.
+- **Text**: use the project's `Text` (typography) component instead of React Native's.
+- **Styles**: follow its styles convention (e.g. `X.styles.ts` + `index.ts`, theme-aware stylesheets).
+- **Logging**: replace `console.error` with the project's logger/Sentry wrapper; never log PII or tokens.
+- **i18n**: use its library and locale files (all supported languages), not `examples/ui/en.json`.
+- **Lint/format**: match its ESLint/Prettier rules, import aliases (`@/...`) and folder layout
+  (domain / services / contexts / components). Examples follow default Prettier (double quotes,
+  2 spaces) with relative imports.
+
 ## References
 
 ```
@@ -27,7 +42,7 @@ examples/
   network.ts  useIsOnline.ts  query-client.ts  ensure-online.ts  auth-offline.ts
   outbox/     state.ts  state.test.ts  outbox-db.ts  OutboxProvider.tsx  send-job.ts
   ui/         OfflineIndicator.tsx  indicator.ts  ReadyToast.tsx  ready-toast.tsx
-              ready-notice.ts  PendingCard.tsx  en.json
+              ready-notice.ts  PendingCard.tsx  theme.ts  en.json
   server/     idempotency.ts
 ```
 

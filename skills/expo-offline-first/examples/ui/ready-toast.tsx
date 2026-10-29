@@ -13,7 +13,7 @@ import { readyNotice, readyNoticeDelay, type ReadyItem } from "./ready-notice";
 import { ReadyToast } from "./ReadyToast";
 
 const TOAST_ID = "items-ready";
-const DURATION_MS = 6000;
+const TOAST_DURATION_MS = 6000;
 /** Where a grouped toast goes, e.g. the list that shows all finished items. */
 const GROUP_HREF = "/(tabs)" as Href;
 
@@ -58,6 +58,6 @@ function show() {
       actionLabel={i18n.t("outbox.view")}
       onPress={open}
     />,
-    { id: TOAST_ID, duration: DURATION_MS, onDismiss: reset, onAutoClose: reset },
+    { id: TOAST_ID, duration: TOAST_DURATION_MS, onDismiss: reset, onAutoClose: reset },
   );
 }

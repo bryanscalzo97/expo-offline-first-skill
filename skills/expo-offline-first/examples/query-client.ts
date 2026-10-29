@@ -15,6 +15,9 @@ import Constants from "expo-constants";
 import Storage from "expo-sqlite/kv-store";
 
 export const PERSIST_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+/** Batch cache writes to disk instead of writing on every query update. */
+const PERSIST_THROTTLE_MS = 1000;
+const STALE_TIME_MS = 5 * 60 * 1000;
 
 /** Query keys (first segment) that are worth showing offline. Allowlist, never "everything". */
 const PERSISTED_ROOTS: ReadonlySet<string> = new Set(["profile", "items", "settings"]);
@@ -27,7 +30,7 @@ function shouldPersistQuery(query: Query): boolean {
 const persister = createAsyncStoragePersister({
   storage: Storage,
   key: "app-query-cache",
-  throttleTime: 1000,
+  throttleTime: PERSIST_THROTTLE_MS,
 });
 
 export const persistOptions: Omit<PersistQueryClientOptions, "queryClient"> = {
@@ -41,7 +44,7 @@ export const persistOptions: Omit<PersistQueryClientOptions, "queryClient"> = {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,
+      staleTime: STALE_TIME_MS,
       // Persisted queries must outlive maxAge or they are garbage-collected before restore.
       gcTime: PERSIST_MAX_AGE,
       // Serve cache offline; pause the fetch (don't error) until the connection is back.
