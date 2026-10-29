@@ -4,6 +4,10 @@ An [Agent Skill](https://agentskills.io) that teaches coding agents (Cursor, Cla
 Copilot, Windsurf, ...) how to make **Expo / React Native apps work offline** without losing user
 input, double-charging on retries, or blocking reads.
 
+<p align="center"><img src="assets/demo.gif" alt="Offline-first demo: offline indicator, queued redesign waiting for connection, back online, and 'design ready' toast" width="300" /></p>
+
+<p align="center"><em>Offline indicator, queued request, and a ready toast once the connection returns.</em></p>
+
 ## Install
 
 ```sh
